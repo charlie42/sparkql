@@ -1,0 +1,15 @@
+prefix drugbank:  <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?label ?halfLife (bound(?type) as ?approved)
+
+  {
+    ?drug_uri rdfs:label ?label .
+    ?drug_uri drugbank:target <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/290> .
+    MINUS { ?drug_uri drugbank:target <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/20> .}
+    ?drug_uri drugbank:drugCategory <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugcategory/anti-inflammatoryAgents,Non-steroidal> .
+    ?drug_uri drugbank:drugCategory ?cat.
+    OPTIONAL { ?drug_uri drugbank:drugType ?type . FILTER (?type = <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugtype/approved>) }
+    OPTIONAL { ?drug_uri drugbank:halfLife ?halfLife . }
+
+  }
+ORDER BY ?approved
